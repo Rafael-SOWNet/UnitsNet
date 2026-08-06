@@ -1,5 +1,6 @@
 // Licensed under MIT No Attribution, see LICENSE file at the root.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using UnitsNet.Modular;
@@ -114,7 +115,10 @@ internal static class Program
     private static bool Collapse(LogicState state, double threshold = 0.5)
         => state.As(LogicStateUnit.Logic) >= threshold;
 
-    private static void ReportOperators(Type t)
+    // Annotated so the sample stays clean under the trim and AOT analyzers: this is the
+    // only reflection in it, and without the annotation it raises IL2070.
+    private static void ReportOperators(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type t)
     {
         MethodInfo[] ops = t.GetMethods(BindingFlags.Public | BindingFlags.Static)
             .Where(m => m.IsSpecialName && m.Name.StartsWith("op_", StringComparison.Ordinal))
