@@ -1,0 +1,188 @@
+{
+  "Name": "LogicState",
+  "Namespace": "Probe.Logic",
+  "BaseUnit": "Logic",
+  "XmlDocSummary": "A two-valued logic state, stored as <c>0</c> (false) or <c>1</c> (true). Units are named <em>senses</em> of the same bit: each declares which real-world condition corresponds to logical true. Converting between senses of the same polarity is the identity; converting across opposite polarities is negation.",
+  "XmlDocRemarks": "Sense names follow KNX datapoint types 1.xxx (ISO/IEC 14543-3) and the BACnet Binary Input Polarity property. KNX defines DPT 1.009 DPT_OpenClose as 0=open, 1=close and DPT 1.019 DPT_Window_Door as 0=closed, 1=open, so the same physical condition is standardised in both polarities. That is the case this quantity exists to handle.",
+  "BaseDimensions": {},
+  "Units": [
+    {
+      "SingularName": "Logic",
+      "PluralName": "Logic",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "Canonical sense: <c>1</c> is true, <c>0</c> is false. KNX DPT 1.002 DPT_Bool.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "bool", "logic" ] } ]
+    },
+
+    {
+      "SingularName": "Active",
+      "PluralName": "Active",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is active. BACnet <c>ACTIVE</c>; KNX DPT 1.011 DPT_State.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "act" ] } ]
+    },
+    {
+      "SingularName": "Inactive",
+      "PluralName": "Inactive",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is inactive. Opposite polarity of <c>Active</c>. BACnet <c>INACTIVE</c>.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "inact" ] } ]
+    },
+
+    {
+      "SingularName": "On",
+      "PluralName": "On",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is on. KNX DPT 1.001 DPT_Switch.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "on" ] } ]
+    },
+    {
+      "SingularName": "Off",
+      "PluralName": "Off",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is off. Opposite polarity of <c>On</c>.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "off" ] } ]
+    },
+
+    {
+      "SingularName": "Enabled",
+      "PluralName": "Enabled",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is enabled. KNX DPT 1.003 DPT_Enable.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "en" ] } ]
+    },
+    {
+      "SingularName": "Disabled",
+      "PluralName": "Disabled",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is disabled. Opposite polarity of <c>Enabled</c>.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "dis" ] } ]
+    },
+
+    {
+      "SingularName": "Present",
+      "PluralName": "Present",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means the thing is present or detected.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "pres" ] } ]
+    },
+    {
+      "SingularName": "Absent",
+      "PluralName": "Absent",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means the thing is absent. Opposite polarity of <c>Present</c>.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "abs" ] } ]
+    },
+
+    {
+      "SingularName": "Occupied",
+      "PluralName": "Occupied",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is occupied. KNX DPT 1.018 DPT_Occupancy.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "occ" ] } ]
+    },
+    {
+      "SingularName": "Unoccupied",
+      "PluralName": "Unoccupied",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is unoccupied. Opposite polarity of <c>Occupied</c>.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "unocc" ] } ]
+    },
+
+    {
+      "SingularName": "Alarm",
+      "PluralName": "Alarms",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is an alarm condition. KNX DPT 1.005 DPT_Alarm.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "alm" ] } ]
+    },
+    {
+      "SingularName": "NoAlarm",
+      "PluralName": "NoAlarm",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is the no-alarm condition. Opposite polarity of <c>Alarm</c>.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "noalm" ] } ]
+    },
+
+    {
+      "SingularName": "High",
+      "PluralName": "High",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is the high signal level. KNX DPT 1.006 DPT_BinaryValue.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "hi" ] } ]
+    },
+    {
+      "SingularName": "Low",
+      "PluralName": "Low",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is the low signal level. Opposite polarity of <c>High</c>; models active-low signalling.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "lo" ] } ]
+    },
+
+    {
+      "SingularName": "Open",
+      "PluralName": "Open",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is open. KNX DPT 1.019 DPT_Window_Door, where 1 = open.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "open" ] } ]
+    },
+    {
+      "SingularName": "Closed",
+      "PluralName": "Closed",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is closed. KNX DPT 1.009 DPT_OpenClose, where 1 = close. Deliberately the opposite polarity of <c>Open</c>, exactly as the two KNX types differ.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "closed" ] } ]
+    },
+
+    {
+      "SingularName": "Valid",
+      "PluralName": "Valid",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means the reading is valid.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "val" ] } ]
+    },
+    {
+      "SingularName": "Invalid",
+      "PluralName": "Invalid",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means the reading is invalid. Opposite polarity of <c>Valid</c>.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "inval" ] } ]
+    },
+
+    {
+      "SingularName": "Fault",
+      "PluralName": "Faults",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is a fault condition.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "flt" ] } ]
+    },
+    {
+      "SingularName": "NoFault",
+      "PluralName": "NoFault",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is the healthy condition. Opposite polarity of <c>Fault</c>.",
+      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "ok" ] } ]
+    }
+  ]
+}
