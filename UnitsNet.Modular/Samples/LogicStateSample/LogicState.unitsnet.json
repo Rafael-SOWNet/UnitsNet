@@ -3,7 +3,7 @@
   "Namespace": "Probe.Logic",
   "BaseUnit": "Logic",
   "XmlDocSummary": "A two-valued logic state, stored as <c>0</c> (false) or <c>1</c> (true). Units are named <em>senses</em> of the same bit: each declares which real-world condition corresponds to logical true. Converting between senses of the same polarity is the identity; converting across opposite polarities is negation.",
-  "XmlDocRemarks": "Sense names follow KNX datapoint types 1.xxx (ISO/IEC 14543-3) and the BACnet Binary Input Polarity property. KNX defines DPT 1.009 DPT_OpenClose as 0=open, 1=close and DPT 1.019 DPT_Window_Door as 0=closed, 1=open, so the same physical condition is standardised in both polarities. That is the case this quantity exists to handle.",
+  "XmlDocRemarks": "Sense names follow KNX datapoint types 1.xxx (ISO/IEC 14543-3) and the BACnet Binary Input Polarity property. KNX defines DPT 1.009 DPT_OpenClose as 0=open, 1=close and DPT 1.019 DPT_Window_Door as 0=closed, 1=open, so the same physical condition is standardised in both polarities. That is the case this quantity exists to handle. Sense names also follow OPC UA TwoStateDiscreteType, whose TrueState/FalseState properties carry exactly this idea: one bit, two named states. IEC 61850's DPC is deliberately NOT modelled here -- it is a 2-bit, four-state type (intermediate, off, on, bad-state) and a two-valued quantity cannot hold it; its two constituent position signals are each a LogicState, and their disagreement is what the four-state type exists to express. Connected/Disconnected describes the link rather than the measurement. OPC UA carries communication failure in the DataValue StatusCode (Bad quality, substatus comm failure) and IEC 61850 in the quality Validity and Detail Quality attributes -- in both cases beside the value, never inside it. Model link state as its own channel. For pairs such as Up/Down, Increase/Decrease and Heating/Cooling neither side is naturally 'true': they are a one-bit encoding of two alternatives rather than a proposition and its negation, and which one maps to 1 is a convention taken from the source standard. Later additions widen the sources: ANSI/ISA-18.2 and OPC UA Part 9 contribute Shelved, Suppressed, Latched, Confirmed and Silenced, which are alarm-state axes independent of each other AND of alarm status itself -- an alarm can be active, shelved and unacknowledged at once, so each belongs on its own channel. PackML (ISA-TR88.00.02) contributes Blocked and Starved, the standardised names for a downstream that is full and an upstream that is empty. Full and Empty are also present, but as TWO pairs (Full/NotFull and Empty/NotEmpty) rather than one, because a part-filled vessel is neither and a single channel cannot hold both propositions -- that is the DPC mistake again. They are also the one part of this catalogue with no naming standard behind them, added on industrial practice and marked as such in their own summaries. NAMUR NE 107 contributes OutOfSpecification and MaintenanceRequired, both deliberately distinct from Fault: its four status signals are independent, not a severity ladder. Inverted and Calculated are different in kind from the rest -- they describe the channel's convention and the value's provenance rather than the condition being reported, and by the same argument that keeps link state and quality beside the value, a consumer may prefer to carry them separately.",
   "BaseDimensions": {},
   "Units": [
     {
@@ -12,16 +12,30 @@
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "Canonical sense: <c>1</c> is true, <c>0</c> is false. KNX DPT 1.002 DPT_Bool.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "bool", "logic" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "bool",
+            "logic"
+          ]
+        }
+      ]
     },
-
     {
       "SingularName": "Active",
       "PluralName": "Active",
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "<c>1</c> is active. BACnet <c>ACTIVE</c>; KNX DPT 1.011 DPT_State.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "act" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "act"
+          ]
+        }
+      ]
     },
     {
       "SingularName": "Inactive",
@@ -29,16 +43,29 @@
       "FromUnitToBaseFunc": "1 - {x}",
       "FromBaseToUnitFunc": "1 - {x}",
       "XmlDocSummary": "<c>1</c> is inactive. Opposite polarity of <c>Active</c>. BACnet <c>INACTIVE</c>.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "inact" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "inact"
+          ]
+        }
+      ]
     },
-
     {
       "SingularName": "On",
       "PluralName": "On",
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "<c>1</c> is on. KNX DPT 1.001 DPT_Switch.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "on" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "on"
+          ]
+        }
+      ]
     },
     {
       "SingularName": "Off",
@@ -46,16 +73,29 @@
       "FromUnitToBaseFunc": "1 - {x}",
       "FromBaseToUnitFunc": "1 - {x}",
       "XmlDocSummary": "<c>1</c> is off. Opposite polarity of <c>On</c>.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "off" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "off"
+          ]
+        }
+      ]
     },
-
     {
       "SingularName": "Enabled",
       "PluralName": "Enabled",
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "<c>1</c> is enabled. KNX DPT 1.003 DPT_Enable.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "en" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "en"
+          ]
+        }
+      ]
     },
     {
       "SingularName": "Disabled",
@@ -63,16 +103,29 @@
       "FromUnitToBaseFunc": "1 - {x}",
       "FromBaseToUnitFunc": "1 - {x}",
       "XmlDocSummary": "<c>1</c> is disabled. Opposite polarity of <c>Enabled</c>.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "dis" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "dis"
+          ]
+        }
+      ]
     },
-
     {
       "SingularName": "Present",
       "PluralName": "Present",
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "<c>1</c> means the thing is present or detected.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "pres" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "pres"
+          ]
+        }
+      ]
     },
     {
       "SingularName": "Absent",
@@ -80,16 +133,29 @@
       "FromUnitToBaseFunc": "1 - {x}",
       "FromBaseToUnitFunc": "1 - {x}",
       "XmlDocSummary": "<c>1</c> means the thing is absent. Opposite polarity of <c>Present</c>.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "abs" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "abs"
+          ]
+        }
+      ]
     },
-
     {
       "SingularName": "Occupied",
       "PluralName": "Occupied",
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "<c>1</c> is occupied. KNX DPT 1.018 DPT_Occupancy.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "occ" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "occ"
+          ]
+        }
+      ]
     },
     {
       "SingularName": "Unoccupied",
@@ -97,16 +163,29 @@
       "FromUnitToBaseFunc": "1 - {x}",
       "FromBaseToUnitFunc": "1 - {x}",
       "XmlDocSummary": "<c>1</c> is unoccupied. Opposite polarity of <c>Occupied</c>.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "unocc" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "unocc"
+          ]
+        }
+      ]
     },
-
     {
       "SingularName": "Alarm",
       "PluralName": "Alarms",
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "<c>1</c> is an alarm condition. KNX DPT 1.005 DPT_Alarm.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "alm" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "alm"
+          ]
+        }
+      ]
     },
     {
       "SingularName": "NoAlarm",
@@ -114,16 +193,29 @@
       "FromUnitToBaseFunc": "1 - {x}",
       "FromBaseToUnitFunc": "1 - {x}",
       "XmlDocSummary": "<c>1</c> is the no-alarm condition. Opposite polarity of <c>Alarm</c>.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "noalm" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "noalm"
+          ]
+        }
+      ]
     },
-
     {
       "SingularName": "High",
       "PluralName": "High",
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "<c>1</c> is the high signal level. KNX DPT 1.006 DPT_BinaryValue.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "hi" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "hi"
+          ]
+        }
+      ]
     },
     {
       "SingularName": "Low",
@@ -131,16 +223,29 @@
       "FromUnitToBaseFunc": "1 - {x}",
       "FromBaseToUnitFunc": "1 - {x}",
       "XmlDocSummary": "<c>1</c> is the low signal level. Opposite polarity of <c>High</c>; models active-low signalling.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "lo" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "lo"
+          ]
+        }
+      ]
     },
-
     {
       "SingularName": "Open",
       "PluralName": "Open",
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "<c>1</c> is open. KNX DPT 1.019 DPT_Window_Door, where 1 = open.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "open" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "open"
+          ]
+        }
+      ]
     },
     {
       "SingularName": "Closed",
@@ -148,16 +253,29 @@
       "FromUnitToBaseFunc": "1 - {x}",
       "FromBaseToUnitFunc": "1 - {x}",
       "XmlDocSummary": "<c>1</c> is closed. KNX DPT 1.009 DPT_OpenClose, where 1 = close. Deliberately the opposite polarity of <c>Open</c>, exactly as the two KNX types differ.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "closed" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "closed"
+          ]
+        }
+      ]
     },
-
     {
       "SingularName": "Valid",
       "PluralName": "Valid",
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "<c>1</c> means the reading is valid.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "val" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "val"
+          ]
+        }
+      ]
     },
     {
       "SingularName": "Invalid",
@@ -165,16 +283,29 @@
       "FromUnitToBaseFunc": "1 - {x}",
       "FromBaseToUnitFunc": "1 - {x}",
       "XmlDocSummary": "<c>1</c> means the reading is invalid. Opposite polarity of <c>Valid</c>.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "inval" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "inval"
+          ]
+        }
+      ]
     },
-
     {
       "SingularName": "Fault",
       "PluralName": "Faults",
       "FromUnitToBaseFunc": "{x}",
       "FromBaseToUnitFunc": "{x}",
       "XmlDocSummary": "<c>1</c> is a fault condition.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "flt" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "flt"
+          ]
+        }
+      ]
     },
     {
       "SingularName": "NoFault",
@@ -182,7 +313,794 @@
       "FromUnitToBaseFunc": "1 - {x}",
       "FromBaseToUnitFunc": "1 - {x}",
       "XmlDocSummary": "<c>1</c> is the healthy condition. Opposite polarity of <c>Fault</c>.",
-      "Localization": [ { "Culture": "en-US", "Abbreviations": [ "ok" ] } ]
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "ok"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Pressed",
+      "PluralName": "Pressed",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means the button is pressed.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "prsd"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Depressed",
+      "PluralName": "Depressed",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means the button is released. Opposite polarity of <c>Pressed</c>; models a normally-closed button.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "dprsd"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Near",
+      "PluralName": "Near",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means the target is near, or in contact. Proximity switch.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "near"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Far",
+      "PluralName": "Far",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means the target is far. Opposite polarity of <c>Near</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "far"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Running",
+      "PluralName": "Running",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means running. OPC UA <c>TwoStateDiscreteType</c> documents <em>RUN</em> as a TrueState example.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "run"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Stopped",
+      "PluralName": "Stopped",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means stopped. Opposite polarity of <c>Running</c>; OPC UA gives <em>STOP</em> as the paired FalseState.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "stop"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Safe",
+      "PluralName": "Safe",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means safe. OPC UA <c>TwoStateDiscreteType</c> documents <em>SAFE</em> as a TrueState example.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "safe"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Unsafe",
+      "PluralName": "Unsafe",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means unsafe. Opposite polarity of <c>Safe</c>; OPC UA gives <em>UNSAFE</em> as the paired FalseState.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "unsafe"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Connected",
+      "PluralName": "Connected",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means the link is up. This is a fact about the <em>channel</em>, not about anything the channel measures: keep it on its own channel and never use it as a sense of a process value.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "conn"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Disconnected",
+      "PluralName": "Disconnected",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means the link is down. Opposite polarity of <c>Connected</c>. A disconnected channel's measured value is <em>unknown</em>, which is not the same as false and cannot be represented here.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "disc"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Succeeded",
+      "PluralName": "Succeeded",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means the operation completed successfully. Distinct from <c>NoFault</c>: this is the outcome of a finished action, not a standing condition. An operation still in progress is neither, and cannot be held here.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "succ"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Failed",
+      "PluralName": "Failed",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means the operation failed. Opposite polarity of <c>Succeeded</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "fail"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Acknowledged",
+      "PluralName": "Acknowledged",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means acknowledged. ANSI/ISA-18.2 treats acknowledgement as an axis <em>orthogonal</em> to active/normal, so an alarm point needs this on its own channel beside <c>Alarm</c>, not instead of it. KNX DPT 1.016 DPT_Ack.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "ack"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Unacknowledged",
+      "PluralName": "Unacknowledged",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means not yet acknowledged. Opposite polarity of <c>Acknowledged</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "unack"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Local",
+      "PluralName": "Local",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means control is local. IEC 61850 models this as the <c>Loc</c> data object, a boolean giving the complementary status of remote control.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "loc"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Remote",
+      "PluralName": "Remote",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means control is remote. Opposite polarity of <c>Local</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "rem"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "InService",
+      "PluralName": "InService",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means the point is in service. BACnet carries the complement as the standard <c>Out_Of_Service</c> property.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "insvc"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "OutOfService",
+      "PluralName": "OutOfService",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means the point is out of service and its value should not be trusted as a measurement. BACnet <c>Out_Of_Service</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "oos"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Set",
+      "PluralName": "Set",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means the latch is set. IEC 61131-3 SR/RS function blocks; KNX DPT 1.015 DPT_Reset.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "set"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Reset",
+      "PluralName": "Reset",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means the latch is reset. Opposite polarity of <c>Set</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "rst"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Up",
+      "PluralName": "Up",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means up. KNX DPT 1.008 DPT_UpDown. Neither side is naturally 'true'; see the note on arbitrary polarity.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "up"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Down",
+      "PluralName": "Down",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means down. Opposite encoding of <c>Up</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "down"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Increase",
+      "PluralName": "Increase",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means increase. KNX DPT 1.007 DPT_Step.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "inc"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Decrease",
+      "PluralName": "Decrease",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means decrease. Opposite encoding of <c>Increase</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "dec"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Heating",
+      "PluralName": "Heating",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> means heating. KNX DPT 1.100 DPT_Heat/Cool.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "heat"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Cooling",
+      "PluralName": "Cooling",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> means cooling. Opposite encoding of <c>Heating</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "cool"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Shelved",
+      "PluralName": "Shelved",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is shelved. ANSI/ISA-18.2: an alarm temporarily suppressed by the operator, time-bounded. Also OPC UA Part 9 <c>ShelvedState</c>. Independent of whether the alarm is active -- keep it on its own channel.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "shlv"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Unshelved",
+      "PluralName": "Unshelved",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is not shelved. Opposite polarity of <c>Shelved</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "unshlv"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Suppressed",
+      "PluralName": "Suppressed",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is suppressed. ANSI/ISA-18.2 'suppressed by design': suppression applied automatically by a designed condition, not by an operator. Also OPC UA Part 9 <c>SuppressedState</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "supp"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Unsuppressed",
+      "PluralName": "Unsuppressed",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is not suppressed. Opposite polarity of <c>Suppressed</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "unsupp"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Latched",
+      "PluralName": "Latched",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is latched. ANSI/ISA-18.2 and OPC UA Part 9 <c>LatchedState</c>: once active it does not clear until explicitly reset, even after the triggering value returns to normal.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "lat"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Unlatched",
+      "PluralName": "Unlatched",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is not latched. Opposite polarity of <c>Latched</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "unlat"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Confirmed",
+      "PluralName": "Confirmed",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is confirmed. OPC UA Part 9 <c>ConfirmedState</c>: a second operator step beyond acknowledgement, tracked separately from it.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "conf"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Unconfirmed",
+      "PluralName": "Unconfirmed",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is not confirmed. Opposite polarity of <c>Confirmed</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "unconf"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Silenced",
+      "PluralName": "Silenced",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is silenced. OPC UA Part 9 <c>SilenceState</c>: the audible annunciation is muted, which says nothing about whether the alarm is still active.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "sil"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Unsilenced",
+      "PluralName": "Unsilenced",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is not silenced. Opposite polarity of <c>Silenced</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "unsil"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Blocked",
+      "PluralName": "Blocked",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is blocked. PackML (ISA-TR88.00.02): the downstream machine cannot accept material, so this one has nowhere to put its output. The standardised way to say 'the receiving side is full'.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "blkd"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Unblocked",
+      "PluralName": "Unblocked",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is not blocked. Opposite polarity of <c>Blocked</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "unblkd"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Starved",
+      "PluralName": "Starved",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is starved. PackML (ISA-TR88.00.02): the upstream machine cannot supply material. The standardised way to say 'the supplying side is empty'.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "strv"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "NotStarved",
+      "PluralName": "NotStarved",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is not starved. Opposite polarity of <c>Starved</c>. Named with a <c>Not</c> prefix because English has no single word for it.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "notstrv"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "OutOfSpecification",
+      "PluralName": "OutOfSpecification",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is out of specification. NAMUR NE 107 status signal S: the device works but is operating outside its permissible limits. Deliberately distinct from <c>Fault</c> -- an out-of-specification reading is still a reading.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "oospec"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "InSpecification",
+      "PluralName": "InSpecification",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is within specification. Opposite polarity of <c>OutOfSpecification</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "inspec"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "MaintenanceRequired",
+      "PluralName": "MaintenanceRequired",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> requires maintenance. NAMUR NE 107 status signal M: the device is functioning but nearing the end of its serviceable life. Independent of both <c>Fault</c> and <c>OutOfSpecification</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "maint"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "NoMaintenanceRequired",
+      "PluralName": "NoMaintenanceRequired",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> requires no maintenance. Opposite polarity of <c>MaintenanceRequired</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "nomaint"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Inverted",
+      "PluralName": "Inverted",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is inverted. KNX DPT 1.012 DPT_Invert, and the same idea as the BACnet Binary Input <c>Polarity</c> property with value REVERSE. Describes the channel's wiring convention, not the condition it reports.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "inv"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "NotInverted",
+      "PluralName": "NotInverted",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is not inverted. KNX DPT 1.012 value 0, and BACnet <c>Polarity</c> NORMAL.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "noinv"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Calculated",
+      "PluralName": "Calculated",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is calculated. KNX DPT 1.014 DPT_InputSource, where 1 = calculated: the value was derived rather than taken directly from its source. Describes the value's provenance, not the condition it reports.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "calc"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Fixed",
+      "PluralName": "Fixed",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is fixed. KNX DPT 1.014 value 0 = fixed: the value was given directly rather than derived. Opposite polarity of <c>Calculated</c>.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "fixed"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Full",
+      "PluralName": "Full",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is full. A point-level full detector, as used for overfill protection. <strong>No naming standard.</strong> Unlike the rest of the catalogue this pair comes from industrial practice rather than a named standard -- a 2026-08-16 search found the terms used as application descriptions ('full detector', 'empty detector') but not as defined datapoints. PackML's <c>Blocked</c> is the standardised way to say a receiving side is full. Independent of <c>Empty</c>: a part-filled vessel is neither, so the two are separate channels.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "full"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "NotFull",
+      "PluralName": "NotFull",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is not full. Opposite polarity of <c>Full</c>. Says nothing about whether the vessel is empty -- that is the <c>Empty</c> channel's question.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "notfull"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "Empty",
+      "PluralName": "Empty",
+      "FromUnitToBaseFunc": "{x}",
+      "FromBaseToUnitFunc": "{x}",
+      "XmlDocSummary": "<c>1</c> is empty. A point-level empty detector, as used for dry-run protection. <strong>No naming standard</strong> -- see <c>Full</c>. PackML's <c>Starved</c> is the standardised way to say a supplying side is empty. Independent of <c>Full</c>: a part-filled vessel is neither, so the two are separate channels.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "empty"
+          ]
+        }
+      ]
+    },
+    {
+      "SingularName": "NotEmpty",
+      "PluralName": "NotEmpty",
+      "FromUnitToBaseFunc": "1 - {x}",
+      "FromBaseToUnitFunc": "1 - {x}",
+      "XmlDocSummary": "<c>1</c> is not empty. Opposite polarity of <c>Empty</c>. Says nothing about whether the vessel is full -- that is the <c>Full</c> channel's question.",
+      "Localization": [
+        {
+          "Culture": "en-US",
+          "Abbreviations": [
+            "notempty"
+          ]
+        }
+      ]
     }
   ]
 }

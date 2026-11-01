@@ -22,7 +22,7 @@ internal static class Program
     private static int _checks;
     private static int _failures;
 
-    public static void Main()
+    public static int Main()
     {
         Section("1. Generated unit catalogue");
         foreach (LogicStateUnit unit in Enum.GetValues<LogicStateUnit>())
@@ -97,10 +97,11 @@ internal static class Program
 
         Section("7. Collapse to a definite value");
         // Collapse is deliberately explicit: a measurement, not an implicit cast.
-        Console.WriteLine($"   Collapse(0.75, threshold 0.5) = {Collapse(LogicState.FromLogic(0.75))}");
-        Console.WriteLine($"   Collapse(0.25, threshold 0.5) = {Collapse(LogicState.FromLogic(0.25))}");
+        // The threshold is a required argument (see LogicOps.cs), so the collapse point is the caller's decision.
+        Console.WriteLine($"   FromLogic(0.75).IsAsserted(0.5) = {LogicState.FromLogic(0.75).IsAsserted(0.5)}");
+        Console.WriteLine($"   FromLogic(0.25).IsAsserted(0.5) = {LogicState.FromLogic(0.25).IsAsserted(0.5)}");
 
-        Section("8. What operators did the generator actually emit?");
+        Section("8. Operators on the type: generated arithmetic, plus the logic operators from LogicOps.cs");
         ReportOperators(typeof(LogicState));
 
         Section("Summary");
@@ -109,11 +110,10 @@ internal static class Program
         {
             Console.WriteLine($"   {_failures} FAILED");
         }
-    }
 
-    /// <summary>Threshold collapse. Explicit by design; there is no implicit bool conversion.</summary>
-    private static bool Collapse(LogicState state, double threshold = 0.5)
-        => state.As(LogicStateUnit.Logic) >= threshold;
+        int failures = _failures + OperatorChecks.Run();
+        return failures == 0 ? 0 : 1;
+    }
 
     // Annotated so the sample stays clean under the trim and AOT analyzers: this is the
     // only reflection in it, and without the annotation it raises IL2070.
